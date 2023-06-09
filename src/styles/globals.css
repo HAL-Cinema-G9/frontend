@@ -1,0 +1,17 @@
+* {
+  padding: 0;
+  margin: 0;
+  border: none;
+  box-sizing: border-box;
+  text-decoration: none;
+  list-style: none;
+  outline: none;
+}
+
+a,
+button {
+  color: inherit;
+  font: inherit;
+  background: inherit;
+  cursor: pointer;
+}
