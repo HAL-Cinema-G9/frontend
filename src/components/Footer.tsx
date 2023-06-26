@@ -8,7 +8,7 @@ const styles = {
     color: white;
   `,
   footerBlock: css`
-    font-size: 2rem;
+    font-size: 1rem;
   `,
 };
 
