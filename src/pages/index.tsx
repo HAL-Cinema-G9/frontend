@@ -70,7 +70,7 @@ const styles = {
 
     margin-right: auto;
 
-    background-color: lightgray;
+    background-color: #fff;
   `,
   left_descriptionBox: css`
     display: flex;
