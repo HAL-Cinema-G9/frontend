@@ -1,4 +1,5 @@
 import { css } from '@emotion/react';
+import Burger from './Navbar/Burger';
 
 const styles = {
   container: css`
@@ -25,7 +26,7 @@ const styles = {
 const Navbar = () => {
   return (
     <div css={styles.container}>
-      <div css={styles.menu}>burger</div>
+      <Burger />
       <div css={styles.logo}>HALCINEMA</div>
       <div css={styles.account}>account</div>
       <div css={styles.search}>search</div>
