@@ -1,7 +1,7 @@
 import Footer from '@/components/Footer';
-import MiddleInfo from '@/components/MiddleInfo';
+import MiddleInfo from '@/components/Index/MiddleInfo';
 import Navbar from '@/components/Navbar';
-import TopInfo from '@/components/TopInfo';
+import TopInfo from '@/components/Index/TopInfo';
 
 export default function Home() {
   return (
