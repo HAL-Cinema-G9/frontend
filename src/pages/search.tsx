@@ -1,9 +1,20 @@
-import React from 'react'
+import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
+
+import Header from '@/components/Search/Header';
+import MainInfo from '@/components/Search/MainInfo';
 
 const Search = () => {
   return (
-    <div>Search</div>
-  )
-}
+    <>
+      <main>
+        <Navbar />
+        <Header />
+        <MainInfo />
+        <Footer />
+      </main>
+    </>
+  );
+};
 
-export default Search
+export default Search;
