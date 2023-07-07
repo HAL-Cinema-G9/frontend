@@ -1,5 +1,15 @@
 # 環境構築
 
+.envファイルは以下のように作成してください。
+```
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+
+NEXTAUTH_URL=
+NEXT_PUBLIC_API_URL=
+NEXTAUTH_SECRET=
+```
+
 - バージョン
   - node: v18.1.0
   - yarn: 1.22.17
@@ -28,4 +38,17 @@ yarn build
 
 # ビルドサーバ起動
 yarn start
+```
+
+※yarnが使えない場合はnpmでもよいです。
+```bash
+# パッケージインストール
+npm i
+
+# 開発サーバ起動
+npm run dev
+
+# ビルドサーバ起動
+npm run build
+npm run start
 ```
