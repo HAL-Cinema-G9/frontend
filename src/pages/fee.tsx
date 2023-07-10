@@ -1,6 +1,7 @@
 import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
 import { Ticket } from '@/types/apiTypes';
+import { addCommas } from '@/utils/addCommas';
 import { css } from '@emotion/react';
 import Image from 'next/image';
 
@@ -61,7 +62,9 @@ const Fee = ({ tickets }: Props) => {
             {tickets.map((ticket) => (
               <tr key={ticket.id}>
                 <td>{ticket.name}</td>
-                <td>{Math.floor(ticket.price)}</td>
+                <td>
+                  {addCommas(Math.floor(ticket.price))}
+                </td>
               </tr>
             ))}
           </tbody>
