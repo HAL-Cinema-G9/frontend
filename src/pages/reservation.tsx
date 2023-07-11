@@ -1,5 +1,6 @@
 import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
+import MovieList from '@/components/Reservation/MovieList';
 import ScheduleCalendar from '@/components/Reservation/ScheduleCalendar';
 import { css } from '@emotion/react';
 
@@ -8,6 +9,9 @@ const styles = {
     padding: 100px 0;
     background-color: #524160;
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 100px;
   `,
 };
 
@@ -17,6 +21,7 @@ const Reservation = () => {
       <Navbar />
       <div css={styles.reservationContainer}>
         <ScheduleCalendar />
+        <MovieList />
       </div>
       <Footer />
     </main>

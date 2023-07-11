@@ -6,6 +6,8 @@ import { useRecoilState } from 'recoil';
 const styles = {
   scheduleCalendarContainer: css`
     width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
   `,
   topTitle: css`
     padding: 20px;
@@ -14,12 +16,26 @@ const styles = {
   `,
   bottomCalendar: css`
     padding: 20px;
-    width: 100%;
     background-color: #c39be4;
     display: flex;
-    justify-content: center;
     align-items: center;
     gap: 10px;
+
+    overflow-x: scroll;
+    &::-webkit-scrollbar {
+      width: 6px;
+      height: 10px;
+      background-color: #fff;
+      border-radius: 5px;
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: #000;
+      border-radius: 5px;
+    }
+    &::-webkit-scrollbar-track {
+      background-color: #fff;
+      border-radius: 5px;
+    }
   `,
   selectDate: css`
     padding: 10px;
