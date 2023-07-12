@@ -46,7 +46,15 @@ const Reservation = ({
             schedules,
           }}
         />
-        <MovieList />
+        <MovieList
+          props={{
+            schedules,
+            screens,
+            seats,
+            movies,
+            reservations,
+          }}
+        />
       </div>
       <Footer />
     </main>

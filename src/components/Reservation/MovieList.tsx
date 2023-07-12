@@ -1,4 +1,13 @@
+import { selectDateState } from '@/recoil/elementAtom';
+import {
+  Movie,
+  ReservationType,
+  Schedule,
+  Screen,
+  Seat,
+} from '@/types/apiTypes';
 import { css } from '@emotion/react';
+import { useRecoilState } from 'recoil';
 
 const styles = {
   movieListContainer: css`
@@ -99,7 +108,46 @@ const styles = {
   `,
 };
 
-const MovieList = () => {
+type Props = {
+  props: {
+    schedules: Schedule[];
+    screens: Screen[];
+    seats: Seat[];
+    movies: Movie[];
+    reservations: ReservationType[];
+  };
+};
+
+const MovieList = ({ props }: Props) => {
+  const {
+    schedules,
+    screens,
+    seats,
+    movies,
+    reservations,
+  } = props;
+  const [selectedDate, setSelectedDate] =
+    useRecoilState<string>(selectDateState);
+  // ここでselectedDateを使って、schedulesから該当する日付のスケジュールを取得する
+  // そのスケジュールから、screenIdを取得して、screensから該当するscreenを取得する
+  // そのscreenから、movieIdを取得して、moviesから該当するmovieを取得する
+  // そのscreenから、seatIdを取得して、seatsから該当するseatを取得する
+  const filteredSchedules = schedules.filter((schedule) => {
+    const scheduleDate = new Date(schedule.date);
+    scheduleDate.setHours(scheduleDate.getHours() - 9);
+    const year = scheduleDate.getFullYear();
+    const month = (scheduleDate.getMonth() + 1)
+      .toString()
+      .padStart(2, '0');
+    const date = scheduleDate
+      .getDate()
+      .toString()
+      .padStart(2, '0');
+    const formattedDate = `${year}-${month}-${date}`;
+    return formattedDate === selectedDate;
+  });
+  console.log(filteredSchedules);
+
   return (
     <div css={styles.movieListContainer}>
       <div css={styles.movieWrapper}>
