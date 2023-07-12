@@ -1,6 +1,6 @@
 import { selectDateState } from '@/recoil/elementAtom';
+import { Schedule } from '@/types/apiTypes';
 import { css } from '@emotion/react';
-import { useEffect } from 'react';
 import { useRecoilState } from 'recoil';
 
 const styles = {
@@ -20,7 +20,6 @@ const styles = {
     display: flex;
     align-items: center;
     gap: 10px;
-
     overflow-x: scroll;
     &::-webkit-scrollbar {
       width: 6px;
@@ -39,19 +38,40 @@ const styles = {
   `,
   selectDate: css`
     padding: 10px;
-    background-color: #fff;
+    background-color: #e28080;
     width: 100px;
     height: 100px;
+    cursor: pointer;
+  `,
+  selectDateActivity: css`
+    padding: 10px;
+    background-color: #9bbce4;
+    width: 100px;
+    height: 100px;
+    cursor: pointer;
+  `,
+  selectDateNone: css`
+    padding: 10px;
+    background-color: white;
+    width: 100px;
+    height: 100px;
+    opacity: 0.7;
   `,
 };
 
-const ScheduleCalendar = () => {
+type Props = {
+  props: {
+    schedules: Schedule[];
+  };
+};
+
+const ScheduleCalendar = ({ props }: Props) => {
+  const { schedules } = props;
   const [selectedDate, setSelectedDate] =
     useRecoilState<string>(selectDateState);
 
-  const showCalendarNum: number = 14;
-  // 日付を取得
   // 今日から2週間分の日付を取得
+  const showCalendarNum: number = 14;
   const calendarDate: string[] = [];
   const fullDate: string[] = [];
   const calendarDayOfWeek: string[] = [];
@@ -68,8 +88,13 @@ const ScheduleCalendar = () => {
     const today = new Date();
     today.setDate(today.getDate() + i);
     const year = today.getFullYear();
-    const month = today.getMonth() + 1;
-    const date = today.getDate();
+    const month = (today.getMonth() + 1)
+      .toString()
+      .padStart(2, '0');
+    const date = today
+      .getDate()
+      .toString()
+      .padStart(2, '0');
     const day = today.getDay();
     const dayOfWeekStr = dayOfWeek[day];
     const todayStr = `${month}/${date}`;
@@ -78,12 +103,31 @@ const ScheduleCalendar = () => {
     calendarDayOfWeek.push(dayOfWeekStr);
   }
 
-  useEffect(() => {
-    if (selectedDate === '') {
-      setSelectedDate(fullDate[0]);
-    }
-    console.log(selectedDate);
-  }, [fullDate]);
+  // schedulesから上映予定が存在する日付を取得
+  const scheduleDate: string[] = [];
+  schedules.map((schedule) => {
+    const date = schedule.date;
+    // 日本時間に変換
+    const dateObj = new Date(date);
+    dateObj.setHours(dateObj.getHours() - 9);
+    const year = dateObj.getFullYear();
+    const month = (dateObj.getMonth() + 1)
+      .toString()
+      .padStart(2, '0');
+    const dateNum = dateObj
+      .getDate()
+      .toString()
+      .padStart(2, '0');
+    const dateStr = `${year}-${month}-${dateNum}`;
+    // 重複を削除
+    if (scheduleDate.includes(dateStr)) return;
+    scheduleDate.push(dateStr);
+  });
+
+  const handleSelectDate = (fullDate: string) => {
+    if (!scheduleDate.includes(fullDate)) return;
+    setSelectedDate(fullDate);
+  };
 
   return (
     <div css={styles.scheduleCalendarContainer}>
@@ -94,8 +138,16 @@ const ScheduleCalendar = () => {
         {calendarDate.map((todayStr, index) => (
           <button
             key={index}
-            css={styles.selectDate}
-            onClick={() => setSelectedDate(fullDate[index])}
+            css={[
+              selectedDate === fullDate[index]
+                ? styles.selectDateActivity
+                : styles.selectDate,
+              !scheduleDate.includes(fullDate[index]) &&
+                styles.selectDateNone,
+            ]}
+            onClick={() =>
+              handleSelectDate(fullDate[index])
+            }
           >
             <p>
               {todayStr}
