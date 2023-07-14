@@ -1,4 +1,11 @@
+import { css } from '@emotion/react';
 import { useSession, signIn } from 'next-auth/react';
+
+const styles = {
+  button: css`
+    background-color: lightgray;
+  `,
+};
 
 const Login = () => {
   const { data: session, status } = useSession();
@@ -10,8 +17,8 @@ const Login = () => {
   if (status !== 'authenticated') {
     return (
       <div>
-        <p>あなたはログインしていません</p>
         <button
+          css={styles.button}
           onClick={() =>
             signIn('google', { prompt: 'login' })
           }
