@@ -1,7 +1,7 @@
 import { useSession } from 'next-auth/react';
 import { css } from '@emotion/react';
-import Login from '@/components/Signin/Login';
-import Logout from '@/components/Signin/Logout';
+import IsLogin from './IsLogin';
+import IsNotLogin from './IsNotLogin';
 
 const styles = {
   container: css`
@@ -28,24 +28,7 @@ const MainInfo = () => {
     <div>
       <div css={styles.container}>
         <div css={styles.content}>
-          {session ? (
-            <div>
-              <p>セッションの期限：{session.expires}</p>
-              <p>ようこそ、{session.user?.name}さん</p>
-              {session.user?.image && (
-                <img
-                  src={session.user?.image}
-                  alt=""
-                  style={{ borderRadius: '50px' }}
-                />
-              )}
-              <div>
-                <Logout />
-              </div>
-            </div>
-          ) : (
-            <Login />
-          )}
+          {session ? <IsLogin /> : <IsNotLogin />}
         </div>
       </div>
     </div>

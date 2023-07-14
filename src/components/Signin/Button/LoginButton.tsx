@@ -17,7 +17,6 @@ const Login = () => {
   if (status !== 'authenticated') {
     return (
       <div>
-        <p>あなたはログインしていません</p>
         <button
           css={styles.button}
           onClick={() =>
