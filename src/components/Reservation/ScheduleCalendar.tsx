@@ -70,8 +70,8 @@ const ScheduleCalendar = ({ props }: Props) => {
   const [selectedDate, setSelectedDate] =
     useRecoilState<string>(selectDateState);
 
-  // 今日から2週間分の日付を取得
-  const showCalendarNum: number = 14;
+  // 今日から1週間分の日付を取得
+  const showCalendarNum: number = 7;
   const calendarDate: string[] = [];
   const fullDate: string[] = [];
   const calendarDayOfWeek: string[] = [];

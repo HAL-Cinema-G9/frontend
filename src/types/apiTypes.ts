@@ -28,9 +28,27 @@ export type Seat = {
 
 export type Schedule = {
   id: number;
-  movie_id: number;
-  screen_id: number;
   date: Date;
+  movie_id: number;
+  movie: Movie;
+  screen_id: number;
+  screen: Screen;
+};
+
+// Response
+export type ShapedScheduleMovie = {
+  id: number;
+  title: string;
+  description: string;
+  director: string;
+  actors: string;
+  duration: number;
+  thumbnail: string;
+  screen: {
+    id: number;
+    name: string;
+    date: Date[];
+  }[];
 };
 
 export type ReservationType = {

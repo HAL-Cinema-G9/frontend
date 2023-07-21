@@ -1,11 +1,12 @@
 import { selectDateState } from '@/recoil/elementAtom';
 import {
-  Movie,
   ReservationType,
   Schedule,
-  Screen,
   Seat,
 } from '@/types/apiTypes';
+import { endMovieTime } from '@/utils/endMovieTime';
+import { shapingSchedule } from '@/utils/shapingSchedule';
+import { startMovieTime } from '@/utils/startMovieTime';
 import { css } from '@emotion/react';
 import { useRecoilState } from 'recoil';
 
@@ -111,27 +112,16 @@ const styles = {
 type Props = {
   props: {
     schedules: Schedule[];
-    screens: Screen[];
     seats: Seat[];
-    movies: Movie[];
     reservations: ReservationType[];
   };
 };
 
 const MovieList = ({ props }: Props) => {
-  const {
-    schedules,
-    screens,
-    seats,
-    movies,
-    reservations,
-  } = props;
+  const { schedules, seats, reservations } = props;
   const [selectedDate, setSelectedDate] =
     useRecoilState<string>(selectDateState);
   // ここでselectedDateを使って、schedulesから該当する日付のスケジュールを取得する
-  // そのスケジュールから、screenIdを取得して、screensから該当するscreenを取得する
-  // そのscreenから、movieIdを取得して、moviesから該当するmovieを取得する
-  // そのscreenから、seatIdを取得して、seatsから該当するseatを取得する
   const filteredSchedules = schedules.filter((schedule) => {
     const scheduleDate = new Date(schedule.date);
     scheduleDate.setHours(scheduleDate.getHours() - 9);
@@ -146,32 +136,46 @@ const MovieList = ({ props }: Props) => {
     const formattedDate = `${year}-${month}-${date}`;
     return formattedDate === selectedDate;
   });
-  console.log(filteredSchedules);
+
+  const showSchedule = shapingSchedule(filteredSchedules);
+
+  console.log(showSchedule);
 
   return (
     <div css={styles.movieListContainer}>
-      <div css={styles.movieWrapper}>
-        <div css={styles.titleWrapper}>
-          <h2>映画タイトル</h2>
-          <p>作品詳細へ</p>
-        </div>
-        <div css={styles.scheduleWrapper}>
-          <div css={styles.screenInfo}>
-            <h2>スクリーン1</h2>
-            <p>150分</p>
+      {showSchedule.map((movie) => (
+        <div css={styles.movieWrapper} key={movie.id}>
+          <div css={styles.titleWrapper}>
+            <h2>{movie.title}</h2>
+            <p>作品詳細へ</p>
           </div>
-          <div css={styles.timeInfo}>
-            <div css={styles.time}>
-              <h3>10:50</h3>
-              <p>~14:50</p>
+          {movie.screen.map((screen) => (
+            <div
+              css={styles.scheduleWrapper}
+              key={screen.id}
+            >
+              <div css={styles.screenInfo}>
+                <h2>{screen.name}</h2>
+                <p>{movie.duration}分</p>
+              </div>
+              {screen.date.map((date, index) => (
+                <div css={styles.timeInfo} key={index}>
+                  <div css={styles.time}>
+                    <h3>{startMovieTime(date)}</h3>
+                    <p>
+                      {endMovieTime(date, movie.duration)}
+                    </p>
+                  </div>
+                  <div css={styles.buyBtn}>
+                    <span>&#9675;</span>
+                    <p>購入</p>
+                  </div>
+                </div>
+              ))}
             </div>
-            <div css={styles.buyBtn}>
-              <span>&#9675;</span>
-              <p>購入</p>
-            </div>
-          </div>
+          ))}
         </div>
-      </div>
+      ))}
     </div>
   );
 };
