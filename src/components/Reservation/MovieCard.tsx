@@ -9,6 +9,7 @@ import { css } from '@emotion/react';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useState } from 'react';
 
 const styles = {
@@ -193,10 +194,14 @@ const MovieCard = ({ props }: Props) => {
                 <h3>{startMovieTime(date)}</h3>
                 <p>{endMovieTime(date, movie.duration)}</p>
               </div>
-              <div css={styles.buyBtn}>
+
+              <Link
+                href={`/reservation-seat/${movie.id}`}
+                css={styles.buyBtn}
+              >
                 <span>&#9675;</span>
                 <p>購入</p>
-              </div>
+              </Link>
             </div>
           ))}
         </div>
