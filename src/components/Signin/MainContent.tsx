@@ -21,7 +21,7 @@ const styles = {
   `,
 };
 
-const MainInfo = () => {
+const MainContent = () => {
   const { data: session, status } = useSession();
 
   return (
@@ -35,4 +35,4 @@ const MainInfo = () => {
   );
 };
 
-export default MainInfo;
+export default MainContent;
