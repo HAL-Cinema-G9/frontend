@@ -6,21 +6,29 @@ import {
   Schedule,
   Seat,
 } from '@/types/apiTypes';
-import { GetStaticPropsContext } from 'next';
+import { GetStaticPaths, GetStaticProps } from 'next';
 
 type Props = {
-  props: {
-    schedule: Schedule;
-    seats: Seat[];
-    reservations: ReservationType[];
-  };
+  schedule: Schedule;
+  seats: Seat[];
+  reservations: ReservationType[];
 };
 
-const ReservationSeat = ({ props }: Props) => {
+const ReservationSeat = ({
+  schedule,
+  seats,
+  reservations,
+}: Props) => {
   return (
     <main>
       <Navbar />
-      <ScreenCard />
+      <ScreenCard
+        props={{
+          schedule,
+          seats,
+          reservations,
+        }}
+      />
       <Footer />
     </main>
   );
@@ -28,23 +36,23 @@ const ReservationSeat = ({ props }: Props) => {
 
 export default ReservationSeat;
 
-export async function getStaticProps({
+export const getStaticProps: GetStaticProps = async ({
   params,
-}: GetStaticPropsContext) {
+}) => {
   const id = params?.id;
 
-  const res_schedules = await fetch(
+  const res_schedule = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/schedules/${id}`
   );
-  const schedule: Schedule = await res_schedules.json();
+  const schedule: Schedule = await res_schedule.json();
 
   const res_seats = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/seats?screen_id=${schedule.screen_id}`
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/seats/screen?screen_id=${schedule.screen_id}`
   );
   const seats: Seat[] = await res_seats.json();
 
   const res_reservations = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/reservations?schedule_id=${id}`
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/reservations/schedule?schedule_id=${id}`
   );
   const reservations: ReservationType[] =
     await res_reservations.json();
@@ -57,4 +65,24 @@ export async function getStaticProps({
     },
     revalidate: 60 * 60 * 24, // 24 hours
   };
-}
+};
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const res_schedules = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/schedules/week`
+  );
+  const schedules: Schedule[] = await res_schedules.json();
+
+  const paths = schedules.map((schedule) => {
+    return {
+      params: {
+        id: schedule.id.toString(),
+      },
+    };
+  });
+
+  return {
+    paths,
+    fallback: false,
+  };
+};
