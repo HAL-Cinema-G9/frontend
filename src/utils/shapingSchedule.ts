@@ -7,9 +7,8 @@ export const shapingSchedule = (schedules: Schedule[]) => {
   const shapedSchedules: ShapedScheduleMovie[] = [];
 
   schedules.forEach((schedule) => {
-    const { movie, screen, date } = schedule;
+    const { id, movie, screen, date } = schedule;
     const {
-      id,
       title,
       description,
       director,
