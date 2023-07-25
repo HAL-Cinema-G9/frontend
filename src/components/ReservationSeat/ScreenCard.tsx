@@ -3,6 +3,7 @@ import {
   Schedule,
   Seat,
 } from '@/types/apiTypes';
+import { groupSeats } from '@/utils/groupSeats';
 import { css } from '@emotion/react';
 
 const styles = {
@@ -18,19 +19,17 @@ const styles = {
     width: 100%;
     max-width: 1200px;
   `,
-
   seatsWrapper: css`
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
   `,
-
   seatGroupWrapper: css`
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+    width: 100%;
   `,
-
   seatCardWrapper: css`
     display: flex;
     align-items: center;
@@ -61,17 +60,18 @@ type Props = {
 const ScreenCard = ({ props }: Props) => {
   const { schedule, seats, reservations } = props;
 
-  // 20件ごとに座席をグループ化する関数
-  const groupSeats = (seats: Seat[], groupSize: number) => {
-    const groups = [];
-    for (let i = 0; i < seats.length; i += groupSize) {
-      groups.push(seats.slice(i, i + groupSize));
-    }
-    return groups;
-  };
+  // screen.nameに大が含まれているときは20件ごとの座席グループを作成
+  // screen.nameに中が含まれているときは12件ごとの座席グループを作成
+  // screen.nameに小が含まれているときは10件ごとの座席グループを作成
+  let seatGroups: Seat[][] = [];
+  if (schedule.screen.name.includes('大')) {
+    seatGroups = groupSeats(seats, 20);
+  } else if (schedule.screen.name.includes('中')) {
+    seatGroups = groupSeats(seats, 12);
+  } else if (schedule.screen.name.includes('小')) {
+    seatGroups = groupSeats(seats, 10);
+  }
 
-  // 20件ごとの座席グループを作成
-  const seatGroups = groupSeats(seats, 20);
   return (
     <div css={styles.container}>
       <h2>{schedule.movie.title}</h2>
@@ -89,12 +89,27 @@ const ScreenCard = ({ props }: Props) => {
                     {seat.column}
                     {seat.row}
                   </span>
-                  {/* seat.rowが4か16のときは隣にcolumnを表示 */}
-                  {seat.row === 4 || seat.row === 16 ? (
-                    <span css={styles.seatColumn}>
-                      {seat.column}
-                    </span>
-                  ) : null}
+
+                  {schedule.screen.name.includes('大') &&
+                    (seat.row === 4 || seat.row === 16) && (
+                      <span css={styles.seatColumn}>
+                        {seat.column}
+                      </span>
+                    )}
+
+                  {schedule.screen.name.includes('中') &&
+                    (seat.row === 2 || seat.row === 10) && (
+                      <span css={styles.seatColumn}>
+                        {seat.column}
+                      </span>
+                    )}
+
+                  {schedule.screen.name.includes('小') &&
+                    (seat.row === 2 || seat.row === 8) && (
+                      <span css={styles.seatColumn}>
+                        {seat.column}
+                      </span>
+                    )}
                 </div>
               ))}
             </div>
