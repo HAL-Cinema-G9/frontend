@@ -14,7 +14,6 @@ const styles = {
     padding: 20px;
   `,
   screenContainer: css`
-    background-color: #fff;
     margin: 0 auto;
     width: 100%;
     max-width: 1200px;
@@ -36,11 +35,13 @@ const styles = {
     margin: 0 auto;
     width: 100%;
     max-width: 1200px;
+    background-color: #fff;
   `,
   seatsWrapper: css`
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+    margin: 20px 0;
   `,
   seatGroupWrapper: css`
     display: flex;

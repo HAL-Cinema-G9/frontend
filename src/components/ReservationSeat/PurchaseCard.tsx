@@ -8,6 +8,7 @@ const styles = {
     justify-content: center;
     margin-bottom: 20px;
     border: 1px solid #ccc;
+    color: #212121;
   `,
   header: css`
     background-color: #ccc;
