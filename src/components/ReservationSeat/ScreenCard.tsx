@@ -5,12 +5,30 @@ import {
 } from '@/types/apiTypes';
 import { groupSeats } from '@/utils/groupSeats';
 import { css } from '@emotion/react';
+import PurchaseCard from './PurchaseCard';
 
 const styles = {
   container: css`
-    padding: 100px 0;
     background-color: #f5f5f5;
     width: 100%;
+    padding: 20px;
+  `,
+  screenContainer: css`
+    background-color: #fff;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 1200px;
+  `,
+  purchaseWrapper: css`
+    width: 100%;
+    max-width: 1200px;
+    margin: 20px auto 0;
+    background-color: #fff;
+  `,
+  titleText: css`
+    font-size: 1.8rem;
+    color: #212121;
+    padding: 20px;
   `,
   screenWrapper: css`
     display: flex;
@@ -74,46 +92,58 @@ const ScreenCard = ({ props }: Props) => {
 
   return (
     <div css={styles.container}>
-      <h2>{schedule.movie.title}</h2>
-      <div>座席一覧</div>
-      <div css={styles.screenWrapper}>
-        <div css={styles.seatsWrapper}>
-          {seatGroups.map((group, index) => (
-            <div key={index} css={styles.seatGroupWrapper}>
-              {group.map((seat) => (
-                <div
-                  key={seat.id}
-                  css={styles.seatCardWrapper}
-                >
-                  <span css={styles.seat}>
-                    {seat.column}
-                    {seat.row}
-                  </span>
+      <div css={styles.purchaseWrapper}>
+        <PurchaseCard schedule={schedule} />
+      </div>
+      <div css={styles.screenContainer}>
+        <div css={styles.titleText}>
+          お好きな座席をお選びください。
+        </div>
+        <div css={styles.screenWrapper}>
+          <div css={styles.seatsWrapper}>
+            {seatGroups.map((group, index) => (
+              <div
+                key={index}
+                css={styles.seatGroupWrapper}
+              >
+                {group.map((seat) => (
+                  <div
+                    key={seat.id}
+                    css={styles.seatCardWrapper}
+                  >
+                    <span css={styles.seat}>
+                      {seat.column}
+                      {seat.row}
+                    </span>
 
-                  {schedule.screen.name.includes('大') &&
-                    (seat.row === 4 || seat.row === 16) && (
-                      <span css={styles.seatColumn}>
-                        {seat.column}
-                      </span>
-                    )}
+                    {schedule.screen.name.includes('大') &&
+                      (seat.row === 4 ||
+                        seat.row === 16) && (
+                        <span css={styles.seatColumn}>
+                          {seat.column}
+                        </span>
+                      )}
 
-                  {schedule.screen.name.includes('中') &&
-                    (seat.row === 2 || seat.row === 10) && (
-                      <span css={styles.seatColumn}>
-                        {seat.column}
-                      </span>
-                    )}
+                    {schedule.screen.name.includes('中') &&
+                      (seat.row === 2 ||
+                        seat.row === 10) && (
+                        <span css={styles.seatColumn}>
+                          {seat.column}
+                        </span>
+                      )}
 
-                  {schedule.screen.name.includes('小') &&
-                    (seat.row === 2 || seat.row === 8) && (
-                      <span css={styles.seatColumn}>
-                        {seat.column}
-                      </span>
-                    )}
-                </div>
-              ))}
-            </div>
-          ))}
+                    {schedule.screen.name.includes('小') &&
+                      (seat.row === 2 ||
+                        seat.row === 8) && (
+                        <span css={styles.seatColumn}>
+                          {seat.column}
+                        </span>
+                      )}
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
