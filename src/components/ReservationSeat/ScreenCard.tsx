@@ -6,6 +6,7 @@ import {
 import { groupSeats } from '@/utils/groupSeats';
 import { css } from '@emotion/react';
 import PurchaseCard from './PurchaseCard';
+import SeatManual from './SeatManual';
 
 const styles = {
   container: css`
@@ -30,8 +31,6 @@ const styles = {
     padding: 20px;
   `,
   screenWrapper: css`
-    display: flex;
-    justify-content: center;
     margin: 0 auto;
     width: 100%;
     max-width: 1200px;
@@ -101,6 +100,7 @@ const ScreenCard = ({ props }: Props) => {
           お好きな座席をお選びください。
         </div>
         <div css={styles.screenWrapper}>
+          <SeatManual />
           <div css={styles.seatsWrapper}>
             {seatGroups.map((group, index) => (
               <div
