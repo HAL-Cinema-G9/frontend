@@ -22,6 +22,7 @@ export type Screen = {
 export type Seat = {
   id: number;
   screen_id: number;
+  screen: Screen;
   column: string;
   row: number;
 };
