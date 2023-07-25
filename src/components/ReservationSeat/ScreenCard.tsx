@@ -40,7 +40,18 @@ const styles = {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    margin: 20px 0;
+    margin: 20px 70px;
+    padding: 50px;
+    color: #fff;
+    background-color: #a9a9a9;
+    border: 3px solid #000;
+  `,
+  screenName: css`
+    width: 80%;
+    text-align: center;
+    font-size: 1.8rem;
+    padding: 20px;
+    border-top: 6px solid #fff;
   `,
   seatGroupWrapper: css`
     display: flex;
@@ -54,16 +65,24 @@ const styles = {
     justify-content: center;
   `,
   seat: css`
-    border: 1px solid #ccc;
-    margin: 5px;
-    width: 40px;
-    height: 40px;
-    background-color: gray;
+    border: 1px solid #212121;
+    border-radius: 2px;
+    margin: 6px 1px;
+    width: 30px;
+    height: 30px;
+    color: #212121;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
   `,
   seatColumn: css`
-    width: 40px;
-    height: 40px;
-    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
   `,
 };
 
@@ -102,6 +121,9 @@ const ScreenCard = ({ props }: Props) => {
         <div css={styles.screenWrapper}>
           <SeatManual />
           <div css={styles.seatsWrapper}>
+            <h5 css={styles.screenName}>
+              {schedule.screen.name}
+            </h5>
             {seatGroups.map((group, index) => (
               <div
                 key={index}
