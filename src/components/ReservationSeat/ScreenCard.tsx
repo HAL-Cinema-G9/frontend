@@ -7,6 +7,7 @@ import { groupSeats } from '@/utils/groupSeats';
 import { css } from '@emotion/react';
 import PurchaseCard from './PurchaseCard';
 import SeatManual from './SeatManual';
+import SeatOrder from './SeatOrder';
 
 const styles = {
   container: css`
@@ -167,6 +168,9 @@ const ScreenCard = ({ props }: Props) => {
               </div>
             ))}
           </div>
+        </div>
+        <div>
+          <SeatOrder seats={seats} />
         </div>
       </div>
     </div>
