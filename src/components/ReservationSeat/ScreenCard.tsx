@@ -8,6 +8,8 @@ import { css } from '@emotion/react';
 import PurchaseCard from './PurchaseCard';
 import SeatManual from './SeatManual';
 import SeatOrder from './SeatOrder';
+import { useRecoilState } from 'recoil';
+import { selectSeatState } from '@/recoil/selectSeatAtom';
 
 const styles = {
   container: css`
@@ -32,10 +34,11 @@ const styles = {
     padding: 20px;
   `,
   screenWrapper: css`
-    margin: 0 auto;
+    margin: 0 auto 20px auto;
     width: 100%;
     max-width: 1200px;
     background-color: #fff;
+    padding-bottom: 20px;
   `,
   seatsWrapper: css`
     display: flex;
@@ -77,6 +80,11 @@ const styles = {
     align-items: center;
     justify-content: center;
     background-color: white;
+    cursor: pointer;
+  `,
+  seatSelected: css`
+    background-color: #b71c1c;
+    color: #fff;
   `,
   seatColumn: css`
     display: flex;
@@ -97,7 +105,8 @@ type Props = {
 
 const ScreenCard = ({ props }: Props) => {
   const { schedule, seats, reservations } = props;
-
+  const [selectSeat, setSelectSeat] =
+    useRecoilState(selectSeatState);
   // screen.nameに大が含まれているときは20件ごとの座席グループを作成
   // screen.nameに中が含まれているときは12件ごとの座席グループを作成
   // screen.nameに小が含まれているときは10件ごとの座席グループを作成
@@ -109,6 +118,22 @@ const ScreenCard = ({ props }: Props) => {
   } else if (schedule.screen.name.includes('小')) {
     seatGroups = groupSeats(seats, 10);
   }
+
+  const selectSeatHandler = (seatId: number) => {
+    if (selectSeat.includes(seatId)) {
+      const newSelectSeat = selectSeat.filter(
+        (seat) => seat !== seatId
+      );
+      setSelectSeat(newSelectSeat);
+      return;
+    } else {
+      if (selectSeat.length < 6) {
+        setSelectSeat([...selectSeat, seatId]);
+      } else {
+        alert('座席は6席まで選択できます。');
+      }
+    }
+  };
 
   return (
     <div css={styles.container}>
@@ -135,7 +160,16 @@ const ScreenCard = ({ props }: Props) => {
                     key={seat.id}
                     css={styles.seatCardWrapper}
                   >
-                    <span css={styles.seat}>
+                    <span
+                      css={[
+                        styles.seat,
+                        selectSeat.includes(seat.id) &&
+                          styles.seatSelected,
+                      ]}
+                      onClick={() =>
+                        selectSeatHandler(seat.id)
+                      }
+                    >
                       {seat.column}
                       {seat.row}
                     </span>
