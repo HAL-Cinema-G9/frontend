@@ -10,6 +10,7 @@ import SeatManual from './SeatManual';
 import SeatOrder from './SeatOrder';
 import { useRecoilState } from 'recoil';
 import { selectSeatState } from '@/recoil/selectSeatAtom';
+import { useEffect } from 'react';
 
 const styles = {
   container: css`
@@ -107,6 +108,10 @@ const ScreenCard = ({ props }: Props) => {
   const { schedule, seats, reservations } = props;
   const [selectSeat, setSelectSeat] =
     useRecoilState(selectSeatState);
+
+  useEffect(() => {
+    setSelectSeat([]);
+  }, []);
   // screen.nameに大が含まれているときは20件ごとの座席グループを作成
   // screen.nameに中が含まれているときは12件ごとの座席グループを作成
   // screen.nameに小が含まれているときは10件ごとの座席グループを作成
