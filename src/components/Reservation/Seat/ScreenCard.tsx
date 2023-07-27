@@ -11,6 +11,8 @@ import SeatOrder from './SeatOrder';
 import { useRecoilState } from 'recoil';
 import { selectSeatState } from '@/recoil/selectSeatAtom';
 import { useEffect } from 'react';
+import ReservationButton from '../Common/ReservationButton';
+import ReservationButtonLayout from '../Common/ReservationButtonLayout';
 
 const styles = {
   container: css`
@@ -211,6 +213,18 @@ const ScreenCard = ({ props }: Props) => {
         <div>
           <SeatOrder seats={seats} />
         </div>
+        <ReservationButtonLayout>
+          <ReservationButton
+            isNext={selectSeat.length > 0}
+            href={`/reservation/ticket/${schedule.id}`}
+            text="次へ"
+          />
+          <ReservationButton
+            isNext={false}
+            href={`/reservation`}
+            text="上映スケジュールに戻る"
+          />
+        </ReservationButtonLayout>
       </div>
     </div>
   );
