@@ -4,10 +4,15 @@ import { css } from '@emotion/react';
 const styles = {
   container: css`
     background-color: #f5f5f5;
-    width: 80%;
-    margin: 50px auto;
-    padding: 40px;
+    width: 100%;
+    margin: 50px 0;
+    padding: 40px 0;
     border-top: 3px solid #ccc;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
   `,
 };
 

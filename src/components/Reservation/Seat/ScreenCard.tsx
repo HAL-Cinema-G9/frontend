@@ -214,7 +214,16 @@ const ScreenCard = ({ props }: Props) => {
           <SeatOrder seats={seats} />
         </div>
         <ReservationButtonLayout>
-          <ReservationButton />
+          <ReservationButton
+            isNext={selectSeat.length > 0}
+            href={`/reservation/ticket/${schedule.id}`}
+            text="次へ"
+          />
+          <ReservationButton
+            isNext={false}
+            href={`/reservation`}
+            text="上映スケジュールに戻る"
+          />
         </ReservationButtonLayout>
       </div>
     </div>
