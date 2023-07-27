@@ -1,6 +1,6 @@
 import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
-import ScreenCard from '@/components/ReservationSeat/ScreenCard';
+import ScreenCard from '@/components/Reservation/Seat/ScreenCard';
 import {
   ReservationType,
   Schedule,
