@@ -11,6 +11,8 @@ import SeatOrder from './SeatOrder';
 import { useRecoilState } from 'recoil';
 import { selectSeatState } from '@/recoil/selectSeatAtom';
 import { useEffect } from 'react';
+import ReservationButton from '../Common/ReservationButton';
+import ReservationButtonLayout from '../Common/ReservationButtonLayout';
 
 const styles = {
   container: css`
@@ -211,6 +213,9 @@ const ScreenCard = ({ props }: Props) => {
         <div>
           <SeatOrder seats={seats} />
         </div>
+        <ReservationButtonLayout>
+          <ReservationButton />
+        </ReservationButtonLayout>
       </div>
     </div>
   );
