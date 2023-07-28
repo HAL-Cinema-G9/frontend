@@ -1,11 +1,6 @@
 import { css } from '@emotion/react';
 import Link from 'next/link';
 
-type Props = {
-  isNext: boolean;
-  href: string;
-  text: string;
-};
 const styles = {
   container: css`
     background-color: #fff;
@@ -23,19 +18,40 @@ const styles = {
     background-color: #b71c1c;
     color: #fff;
   `,
+  isNotSufficient: css`
+    background-color: #616161;
+    color: #9e9e9e;
+  `,
 };
+
+type Props = {
+  isSufficient: boolean; // 必要な値が入力されているかどうか
+  isNext: boolean; // 次へボタンかどうか
+  href: string; // ボタンのリンク先
+  text: string; // ボタンのテキスト
+};
+
 const ReservationButton = ({
+  isSufficient,
   isNext,
   href,
   text,
 }: Props) => {
   return (
-    <Link
-      href={href}
-      css={[styles.container, isNext && styles.isNext]}
-    >
-      {text}
-    </Link>
+    <>
+      {isSufficient ? (
+        <Link
+          href={href}
+          css={[styles.container, isNext && styles.isNext]}
+        >
+          {text}
+        </Link>
+      ) : (
+        <p css={[styles.container, styles.isNotSufficient]}>
+          {text}
+        </p>
+      )}
+    </>
   );
 };
 
