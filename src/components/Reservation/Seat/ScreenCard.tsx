@@ -111,6 +111,7 @@ const ScreenCard = ({ props }: Props) => {
   const [selectSeat, setSelectSeat] =
     useRecoilState(selectSeatState);
 
+  console.log(schedule);
   useEffect(() => {
     setSelectSeat([]);
   }, []);
@@ -219,7 +220,9 @@ const ScreenCard = ({ props }: Props) => {
             isNext={true}
             href={`/reservation/${
               schedule.id
-            }/seat?seatId=${selectSeat.join(',')}&type`}
+            }/seat?select_seat=${selectSeat.join(
+              '&'
+            )}/ticket`}
             text="次へ"
           />
           <ReservationButton

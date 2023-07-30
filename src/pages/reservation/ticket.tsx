@@ -1,32 +1,29 @@
 import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
-import ScreenCard from '@/components/Reservation/Seat/ScreenCard';
-import {
-  ReservationType,
-  Schedule,
-  Seat,
-} from '@/types/apiTypes';
+import TicketCard from '@/components/Reservation/Ticket/TicketCard';
+import { Schedule, Seat, Ticket } from '@/types/apiTypes';
 import { GetStaticPaths, GetStaticProps } from 'next';
+import React from 'react';
 
 type Props = {
   schedule: Schedule;
   seats: Seat[];
-  reservations: ReservationType[];
+  tickets: Ticket[];
 };
 
-const ReservationSeat = ({
+const ReservationTicket = ({
   schedule,
   seats,
-  reservations,
+  tickets,
 }: Props) => {
   return (
     <main>
       <Navbar />
-      <ScreenCard
+      <TicketCard
         props={{
           schedule,
           seats,
-          reservations,
+          tickets,
         }}
       />
       <Footer />
@@ -34,7 +31,7 @@ const ReservationSeat = ({
   );
 };
 
-export default ReservationSeat;
+export default ReservationTicket;
 
 export const getStaticProps: GetStaticProps = async ({
   params,
@@ -51,38 +48,17 @@ export const getStaticProps: GetStaticProps = async ({
   );
   const seats: Seat[] = await res_seats.json();
 
-  const res_reservations = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/reservations/schedule?schedule_id=${id}`
+  const res_tickets = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/tickets`
   );
-  const reservations: ReservationType[] =
-    await res_reservations.json();
+  const tickets: Ticket[] = await res_tickets.json();
 
   return {
     props: {
       schedule,
       seats,
-      reservations,
+      tickets,
     },
     revalidate: 60 * 60 * 24, // 24 hours
-  };
-};
-
-export const getStaticPaths: GetStaticPaths = async () => {
-  const res_schedules = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/schedules/week`
-  );
-  const schedules: Schedule[] = await res_schedules.json();
-
-  const paths = schedules.map((schedule) => {
-    return {
-      params: {
-        id: schedule.id.toString(),
-      },
-    };
-  });
-
-  return {
-    paths,
-    fallback: false,
   };
 };
