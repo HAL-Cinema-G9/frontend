@@ -111,6 +111,7 @@ const ScreenCard = ({ props }: Props) => {
   const [selectSeat, setSelectSeat] =
     useRecoilState(selectSeatState);
 
+  console.log(schedule);
   useEffect(() => {
     setSelectSeat([]);
   }, []);
@@ -217,7 +218,7 @@ const ScreenCard = ({ props }: Props) => {
           <ReservationButton
             isSufficient={selectSeat.length > 0}
             isNext={true}
-            href={`/reservation/ticket/${schedule.id}`}
+            href={`/reservation/ticket?scheduleId=${schedule.id}&seatId=${selectSeat}`}
             text="次へ"
           />
           <ReservationButton

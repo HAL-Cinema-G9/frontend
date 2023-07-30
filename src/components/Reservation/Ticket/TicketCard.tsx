@@ -1,12 +1,13 @@
-import { selectSeatState } from '@/recoil/selectSeatAtom';
 import { Schedule, Seat, Ticket } from '@/types/apiTypes';
-import { useRecoilState } from 'recoil';
 import { css } from '@emotion/react';
 import SeatCard from './SeatCard';
 import ReservationButtonLayout from '../Common/ReservationButtonLayout';
 import ReservationButton from '../Common/ReservationButton';
 import IsSignInCard from './IsSignInCard';
 import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
+import { useRecoilState } from 'recoil';
+import { selectTicketState } from '@/recoil/selectSeatAtom';
 
 const styles = {
   container: css`
@@ -60,9 +61,18 @@ type Props = {
 
 const TicketCard = ({ props }: Props) => {
   const { schedule, seats, tickets } = props;
-  const [selectSeat, setSelectSeat] =
-    useRecoilState(selectSeatState);
+  const router = useRouter();
+  const strSelectSeat = router.query.seatId;
+  const selectSeat: number[] = strSelectSeat
+    ? strSelectSeat
+        .toString()
+        .split(',')
+        .map((seatId) => Number(seatId))
+    : [];
   const { data: session, status } = useSession();
+  const [selectTicket, setSelectTicket] = useRecoilState(
+    selectTicketState
+  );
 
   return (
     <div css={styles.container}>
@@ -93,13 +103,13 @@ const TicketCard = ({ props }: Props) => {
           <ReservationButton
             isSufficient={session ? true : false}
             isNext={true}
-            href={`/reservation/confirm/${schedule.id}`}
+            href={`/reservation/confirm?schduleId=${schedule.id}&seatId=${selectSeat}&ticketId=${selectTicket}`}
             text={'確認画面へ'}
           />
           <ReservationButton
             isSufficient={true}
             isNext={false}
-            href={`/reservation/seat/${schedule.id}`}
+            href={`/reservation/seat?schduleId=${schedule.id}`}
             text={'座席選択画面に戻る'}
           />
         </ReservationButtonLayout>
