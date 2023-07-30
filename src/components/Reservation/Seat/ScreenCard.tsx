@@ -218,11 +218,7 @@ const ScreenCard = ({ props }: Props) => {
           <ReservationButton
             isSufficient={selectSeat.length > 0}
             isNext={true}
-            href={`/reservation/${
-              schedule.id
-            }/seat?select_seat=${selectSeat.join(
-              '&'
-            )}/ticket`}
+            href={`/reservation/ticket?scheduleId=${schedule.id}&seatId=${selectSeat}`}
             text="次へ"
           />
           <ReservationButton
