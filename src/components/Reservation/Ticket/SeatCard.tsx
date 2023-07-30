@@ -31,6 +31,7 @@ const styles = {
 
 type Props = {
   props: {
+    index: number;
     schedule: Schedule;
     seats: Seat[];
     tickets: Ticket[];
@@ -39,7 +40,7 @@ type Props = {
 };
 
 const SeatCard = ({ props }: Props) => {
-  const { schedule, seats, tickets, seatId } = props;
+  const { index, schedule, seats, tickets, seatId } = props;
 
   //seatと一致するseatを取得
   const selectSeat = seats.find((s) => seatId == s.id);
@@ -58,7 +59,7 @@ const SeatCard = ({ props }: Props) => {
           {selectSeat?.row}
         </p>
       </div>
-      <SelectTicketCard tickets={tickets} />
+      <SelectTicketCard tickets={tickets} index={index} />
     </div>
   );
 };

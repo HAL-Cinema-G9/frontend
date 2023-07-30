@@ -8,6 +8,7 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { useRecoilState } from 'recoil';
 import { selectTicketState } from '@/recoil/selectSeatAtom';
+import { useEffect } from 'react';
 
 const styles = {
   container: css`
@@ -74,6 +75,11 @@ const TicketCard = ({ props }: Props) => {
     selectTicketState
   );
 
+  useEffect(() => {
+    const arrTicket = selectSeat.map(() => '');
+    setSelectTicket(arrTicket);
+  }, []);
+
   return (
     <div css={styles.container}>
       <div css={styles.ticketContainer}>
@@ -84,10 +90,11 @@ const TicketCard = ({ props }: Props) => {
           <p css={styles.screenName}>
             {schedule.screen.name}
           </p>
-          {selectSeat.map((seatId) => (
+          {selectSeat.map((seatId, index) => (
             <div css={styles.seats} key={seatId}>
               <SeatCard
                 props={{
+                  index,
                   schedule,
                   seats,
                   tickets,
@@ -101,7 +108,11 @@ const TicketCard = ({ props }: Props) => {
         <IsSignInCard />
         <ReservationButtonLayout>
           <ReservationButton
-            isSufficient={session ? true : false}
+            isSufficient={
+              selectTicket.length > 0 && session
+                ? true
+                : false
+            }
             isNext={true}
             href={`/reservation/confirm?schduleId=${schedule.id}&seatId=${selectSeat}&ticketId=${selectTicket}`}
             text={'確認画面へ'}
