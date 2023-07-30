@@ -25,6 +25,9 @@ const styles = {
     border-radius: 5px;
     color: #212121;
   `,
+  signInWrapper: css`
+    margin-top: 20px;
+  `,
 };
 
 const IsSignInCard = () => {
@@ -44,7 +47,9 @@ const IsSignInCard = () => {
       <div css={styles.detail}>
         <h3>・ソーシャルアカウントでログイン</h3>
         <p>※次に進むためにはログインしてください</p>
-        <Login />
+        <div css={styles.signInWrapper}>
+          <Login />
+        </div>
       </div>
     </div>
   );
