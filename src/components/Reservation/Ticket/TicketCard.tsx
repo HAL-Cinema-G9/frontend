@@ -6,6 +6,7 @@ import SeatCard from './SeatCard';
 import ReservationButtonLayout from '../Common/ReservationButtonLayout';
 import ReservationButton from '../Common/ReservationButton';
 import IsSignInCard from './IsSignInCard';
+import { useSession } from 'next-auth/react';
 
 const styles = {
   container: css`
@@ -61,6 +62,7 @@ const TicketCard = ({ props }: Props) => {
   const { schedule, seats, tickets } = props;
   const [selectSeat, setSelectSeat] =
     useRecoilState(selectSeatState);
+  const { data: session, status } = useSession();
 
   return (
     <div css={styles.container}>
@@ -89,7 +91,7 @@ const TicketCard = ({ props }: Props) => {
         <IsSignInCard />
         <ReservationButtonLayout>
           <ReservationButton
-            isSufficient={true}
+            isSufficient={session ? true : false}
             isNext={true}
             href={`/reservation/confirm/${schedule.id}`}
             text={'確認画面へ'}
