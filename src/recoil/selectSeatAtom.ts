@@ -6,7 +6,7 @@ export const selectSeatState = atom<number[]>({
   default: [],
 });
 
-export const selectTicketState = atom<number[]>({
+export const selectTicketState = atom<(number | string)[]>({
   key: 'selectTicketState',
   default: [],
 });

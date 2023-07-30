@@ -1,6 +1,9 @@
 import { css } from '@emotion/react';
 import { Ticket } from '@/types/apiTypes';
 import { addCommas } from '@/utils/addCommas';
+import { selectTicketState } from '@/recoil/selectSeatAtom';
+import { useRecoilState } from 'recoil';
+import { ReactElement, useEffect, useState } from 'react';
 
 const styles = {
   container: css`
@@ -37,27 +40,60 @@ const styles = {
 
 type Props = {
   tickets: Ticket[];
+  index: number;
 };
 
-const SelectTicketCard = ({ tickets }: Props) => {
+const SelectTicketCard = ({ tickets, index }: Props) => {
+  const [selectTicket, setSelectTicket] = useRecoilState(
+    selectTicketState
+  );
+  const [showFlg, setShowFlg] = useState<boolean>(false);
+  console.log(selectTicket);
+
+  const [selectedTicketId, setSelectedTicketId] =
+    useState<string>('');
+
+  const handleSelectChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    const selectedId = event.target.value;
+    setSelectedTicketId(selectedId);
+  };
+
+  useEffect(() => {
+    // レンダリング後に選択したオプションの値をselectTicketステートに反映する
+    const updatedSelectTicket = [...selectTicket];
+    updatedSelectTicket[index] =
+      selectedTicketId === ''
+        ? ''
+        : Number(selectedTicketId);
+    setSelectTicket(updatedSelectTicket);
+    setShowFlg(true);
+  }, [selectedTicketId]);
+
   return (
-    <label css={styles.container}>
-      <select required css={styles.select}>
+    <div css={styles.container}>
+      <select
+        css={styles.select}
+        value={selectedTicketId}
+        onChange={handleSelectChange}
+      >
         <option value="" hidden>
           券種を選択してください
         </option>
-        {tickets.map((ticket) => (
-          <option
-            key={ticket.id}
-            value={ticket.id}
-            css={styles.option}
-          >
-            {ticket.name} :{' '}
-            {addCommas(Math.floor(ticket.price))}円
-          </option>
-        ))}
+        {showFlg &&
+          tickets.map((ticket, index) => (
+            <option
+              key={index}
+              value={ticket.id}
+              css={styles.option}
+            >
+              {ticket.name} :{' '}
+              {addCommas(Math.floor(ticket.price))}円
+            </option>
+          ))}
       </select>
-    </label>
+    </div>
   );
 };
 
