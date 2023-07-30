@@ -196,7 +196,7 @@ const MovieCard = ({ props }: Props) => {
               </div>
 
               <Link
-                href={`/reservation/seat/${movie.id}`}
+                href={`/reservation/${movie.id}/seat`}
                 css={styles.buyBtn}
               >
                 <span>&#9675;</span>
