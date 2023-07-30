@@ -1,4 +1,5 @@
 import Login from '@/components/Signin/Button/LoginButton';
+import Logout from '@/components/Signin/Button/LogoutButton';
 import { css } from '@emotion/react';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
@@ -28,6 +29,9 @@ const styles = {
   signInWrapper: css`
     margin-top: 20px;
   `,
+  signOutWrapper: css`
+    margin-top: 20px;
+  `,
 };
 
 const IsSignInCard = () => {
@@ -45,11 +49,31 @@ const IsSignInCard = () => {
         <h2>会員登録</h2>
       </div>
       <div css={styles.detail}>
-        <h3>・ソーシャルアカウントでログイン</h3>
-        <p>※次に進むためにはログインしてください</p>
-        <div css={styles.signInWrapper}>
-          <Login />
-        </div>
+        {!session ? (
+          <div>
+            <h3>・ソーシャルアカウントでログイン</h3>
+            <p>※次に進むためにはログインしてください</p>
+            <div css={styles.signInWrapper}>
+              <Login />
+            </div>
+          </div>
+        ) : (
+          <div>
+            <h3>
+              ・ログイン済みアカウントが正しければ先にお進みください
+            </h3>
+            <br />
+            <p>メールアドレス：{session.user?.email}</p>
+            <p>ユーザー名：{session.user?.name}</p>
+            <br />
+            <p>
+              ※ログアウトする場合は下のボタンを押してください
+            </p>
+            <div css={styles.signOutWrapper}>
+              <Logout />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
