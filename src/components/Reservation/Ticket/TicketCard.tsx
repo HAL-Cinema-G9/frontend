@@ -3,6 +3,9 @@ import { Schedule, Seat, Ticket } from '@/types/apiTypes';
 import { useRecoilState } from 'recoil';
 import { css } from '@emotion/react';
 import SeatCard from './SeatCard';
+import ReservationButtonLayout from '../Common/ReservationButtonLayout';
+import ReservationButton from '../Common/ReservationButton';
+import IsSignInCard from './IsSignInCard';
 
 const styles = {
   container: css`
@@ -82,6 +85,22 @@ const TicketCard = ({ props }: Props) => {
             </div>
           ))}
         </div>
+        {/* signinしているか */}
+        <IsSignInCard />
+        <ReservationButtonLayout>
+          <ReservationButton
+            isSufficient={true}
+            isNext={true}
+            href={`/reservation/confirm/${schedule.id}`}
+            text={'確認画面へ'}
+          />
+          <ReservationButton
+            isSufficient={true}
+            isNext={false}
+            href={`/reservation/seat/${schedule.id}`}
+            text={'座席選択画面に戻る'}
+          />
+        </ReservationButtonLayout>
       </div>
     </div>
   );
