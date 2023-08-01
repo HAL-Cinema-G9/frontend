@@ -8,6 +8,7 @@ import {
   Seat,
 } from '@/types/apiTypes';
 import { css } from '@emotion/react';
+import { GetServerSideProps } from 'next';
 
 const styles = {
   reservationContainer: css`
@@ -55,29 +56,30 @@ const Reservation = ({
 
 export default Reservation;
 
-export async function getStaticProps() {
-  const res_schedules = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/schedules/week`
-  );
-  const schedules: Schedule[] = await res_schedules.json();
+export const getServerSideProps: GetServerSideProps =
+  async () => {
+    const res_schedules = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/schedules/week`
+    );
+    const schedules: Schedule[] =
+      await res_schedules.json();
 
-  const res_seats = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/seats`
-  );
-  const seats: Seat[] = await res_seats.json();
+    const res_seats = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/seats`
+    );
+    const seats: Seat[] = await res_seats.json();
 
-  const res_reservations = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/reservations`
-  );
-  const reservations: ReservationType[] =
-    await res_reservations.json();
+    const res_reservations = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/reservations`
+    );
+    const reservations: ReservationType[] =
+      await res_reservations.json();
 
-  return {
-    props: {
-      schedules,
-      seats,
-      reservations,
-    },
-    revalidate: 60 * 60 * 24, // 24 hours
+    return {
+      props: {
+        schedules,
+        seats,
+        reservations,
+      },
+    };
   };
-}

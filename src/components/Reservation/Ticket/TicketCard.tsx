@@ -114,7 +114,7 @@ const TicketCard = ({ props }: Props) => {
                 : false
             }
             isNext={true}
-            href={`/reservation/confirm?schduleId=${schedule.id}&seatId=${selectSeat}&ticketId=${selectTicket}`}
+            href={`/reservation/confirm?scheduleId=${schedule.id}&seatId=${selectSeat}&ticketId=${selectTicket}`}
             text={'確認画面へ'}
           />
           <ReservationButton

@@ -6,19 +6,22 @@ import { GetServerSideProps } from 'next';
 
 type Props = {
   schedule: Schedule;
-  seats: Seat[];
   tickets: Ticket[];
 };
 
 const ReservationConfirm = ({
   schedule,
-  seats,
   tickets,
 }: Props) => {
   return (
     <main>
       <Navbar />
-      <ConfirmCard />
+      <ConfirmCard
+        props={{
+          schedule,
+          tickets,
+        }}
+      />
       <Footer />
     </main>
   );
@@ -36,11 +39,6 @@ export const getServerSideProps: GetServerSideProps =
     );
     const schedule: Schedule = await res_schedule.json();
 
-    const res_seats = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/seats/screen?screen_id=${schedule.screen_id}`
-    );
-    const seats: Seat[] = await res_seats.json();
-
     const res_tickets = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/api/v1/tickets`
     );
@@ -49,7 +47,6 @@ export const getServerSideProps: GetServerSideProps =
     return {
       props: {
         schedule,
-        seats,
         tickets,
       },
     };
