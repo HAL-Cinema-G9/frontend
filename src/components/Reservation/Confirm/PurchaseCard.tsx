@@ -3,6 +3,7 @@ import { Schedule, Seat, Ticket } from '@/types/apiTypes';
 import { endMovieTime } from '@/utils/endMovieTime';
 import { startMovieTime } from '@/utils/startMovieTime';
 import { addCommas } from '@/utils/addCommas';
+import { useSession } from 'next-auth/react';
 
 const styles = {
   container: css`
@@ -35,6 +36,7 @@ type Props = {
 };
 
 const PurchaseCard = ({ props }: Props) => {
+  const { data: session, status } = useSession();
   const { schedule, tickets, selectTicket, seats } = props;
   // formattedDate: 例 2023年7月26日（水）15:20∼17:35
   const scheduleDate = new Date(schedule.date);
@@ -69,6 +71,11 @@ const PurchaseCard = ({ props }: Props) => {
 
   return (
     <div css={styles.container}>
+      <p css={styles.header}>ご購入者情報</p>
+      <div css={styles.main}>
+        <p>メールアドレス：{session?.user?.email}</p>
+        <p>ユーザー名：{session?.user?.name}</p>
+      </div>
       <p css={styles.header}>ご購入内容</p>
       <div css={styles.main}>
         <p>作品</p>
