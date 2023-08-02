@@ -9,6 +9,7 @@ import { useRouter } from 'next/router';
 import { useRecoilState } from 'recoil';
 import { selectTicketState } from '@/recoil/selectSeatAtom';
 import { useEffect } from 'react';
+import { addCommas } from '@/utils/addCommas';
 
 const styles = {
   container: css`
@@ -50,6 +51,21 @@ const styles = {
     align-items: center;
     gap: 20px;
   `,
+  totalPriceWrapper: css`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    color: #212121;
+  `,
+  totalPrice: css`
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    h1 {
+      font-size: 2rem;
+    }
+  `,
 };
 
 type Props = {
@@ -80,6 +96,15 @@ const TicketCard = ({ props }: Props) => {
     setSelectTicket(arrTicket);
   }, []);
 
+  // 合計金額を計算
+  let totalPrice = 0;
+  selectTicket.forEach((ticketId) => {
+    const ticket = tickets.find((t) => t.id == ticketId);
+    if (ticket) {
+      totalPrice += Number(ticket.price);
+    }
+  });
+
   return (
     <div css={styles.container}>
       <div css={styles.ticketContainer}>
@@ -103,6 +128,13 @@ const TicketCard = ({ props }: Props) => {
               />
             </div>
           ))}
+          <div css={styles.totalPriceWrapper}>
+            <h2>合計</h2>
+            <div css={styles.totalPrice}>
+              <h1>{addCommas(totalPrice)}</h1>
+              <h2>円</h2>
+            </div>
+          </div>
         </div>
         {/* signinしているか */}
         <IsSignInCard />
