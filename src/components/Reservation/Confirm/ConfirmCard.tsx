@@ -1,15 +1,41 @@
 import { Schedule, Seat, Ticket } from '@/types/apiTypes';
-import { endMovieTime } from '@/utils/endMovieTime';
-import { startMovieTime } from '@/utils/startMovieTime';
 import { css } from '@emotion/react';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import PurchaseCard from './PurchaseCard';
+import ReservationButtonLayout from '../Common/ReservationButtonLayout';
+import ReservationButton from '../Common/ReservationButton';
+import { useSession } from 'next-auth/react';
+import ReservationConfirmButton from './ReservationConfirmButton';
+import axios from 'axios';
 
 const styles = {
   container: css`
     background-color: #f5f5f5;
     width: 100%;
     padding: 20px;
+  `,
+  confirmContainer: css`
+    margin: 0 auto;
+    width: 100%;
+    max-width: 1200px;
+  `,
+  titleText: css`
+    font-size: 1.8rem;
+    color: #212121;
+    padding: 0 20px;
+  `,
+  confirmBox: css`
+    margin: 20px auto;
+    width: 100%;
+    max-width: 1200px;
+    padding: 20px 0;
+    border: #ccc 3px solid;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
   `,
 };
 
@@ -21,6 +47,7 @@ type Props = {
 };
 
 const ConfirmCard = ({ props }: Props) => {
+  const { data: session, status } = useSession();
   const router = useRouter();
   // http://localhost:3000/reservation/confirm?schduleId=16&seatId=190,191,192&ticketId=4,3,3
   const { seatId, ticketId } = router.query; // ここでURLのクエリパラメータを取得する
@@ -44,25 +71,8 @@ const ConfirmCard = ({ props }: Props) => {
     );
   }
 
-  console.log(schedule);
-  const scheduleDate = new Date(schedule.date);
-  const year = scheduleDate.getFullYear();
-  const month = (scheduleDate.getMonth() + 1)
-    .toString()
-    .padStart(2, '0');
-  const date = scheduleDate
-    .getDate()
-    .toString()
-    .padStart(2, '0');
-
-  const formattedDate = `${year}年${month}月${date}日（水）${startMovieTime(
-    scheduleDate
-  )}~${endMovieTime(
-    scheduleDate,
-    schedule.movie.duration
-  )}`;
-
   const [seats, setSeats] = useState<Seat[]>([]);
+  const [userId, setUserId] = useState<number | null>(null);
   useEffect(() => {
     // ここで必要な座席情報を取得する
     const res_schedule = async () => {
@@ -77,43 +87,90 @@ const ConfirmCard = ({ props }: Props) => {
       setSeats(seats);
     };
     res_schedule();
+    // userIdの取得
+    const res_user = async () => {
+      if (session) {
+        const res_user = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/user?email=${session.user?.email}`
+        );
+        const user = await res_user.json();
+        setUserId(user.id);
+      }
+    };
+    res_user();
   }, []);
+
+  const handleConfirmReservation = async () => {
+    if (!userId) {
+      alert('ログインしてください');
+      return;
+    }
+
+    try {
+      for (const [index, seat] of Object.entries(seats)) {
+        const ticketId = selectTicket[Number(index)];
+        const seatId = selectSeat[Number(index)];
+
+        const response = await axios.post(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/reservations`,
+          {
+            user_id: userId,
+            ticket_id: ticketId,
+            seat_id: seatId,
+            schedule_id: schedule.id,
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }
+        );
+
+        if (response.status === 200) {
+          // 予約が成功した場合の処理をここに記述
+          router.push(`/reservation/complete`);
+        } else {
+          // 予約が失敗した場合の処理をここに記述
+          alert('予約に失敗しました');
+        }
+      }
+    } catch (error) {
+      console.error(
+        'Error occurred while confirming reservation:',
+        error
+      );
+      // エラーが発生した場合の処理をここに記述
+      alert('予約に失敗しました');
+    }
+  };
 
   return (
     <div css={styles.container}>
-      <p>作品</p>
-      <h3>{schedule.movie.title}</h3>
-      <p>日時</p>
-      <h3>{formattedDate}</h3>
-      <p>スクリーン</p>
-      <h3>{schedule.screen.name}</h3>
-      <p>座席</p>
-      <h3>
-        {seats.map((seat, index) => (
-          <div key={seat.id}>
-            <p>
-              {seat.column}
-              {seat.row}
-            </p>
-            <p>
-              {/* チケットの名前と金額 */}
-              {
-                tickets.find(
-                  (ticket) =>
-                    ticket.id === selectTicket[index]
-                )?.name // ここでチケットの名前を取得する
-              }
-              :
-              {
-                tickets.find(
-                  (ticket) =>
-                    ticket.id === selectTicket[index]
-                )?.price // ここでチケットの金額を取得する
-              }
-            </p>
-          </div>
-        ))}
-      </h3>
+      <div css={styles.confirmContainer}>
+        <div css={styles.titleText}>
+          情報が正しければ「予約する」を押してください
+        </div>
+        <PurchaseCard
+          props={{
+            schedule,
+            tickets,
+            selectTicket,
+            seats,
+          }}
+        />
+        <ReservationButtonLayout>
+          <ReservationConfirmButton
+            isSufficient={session ? true : false}
+            onClick={handleConfirmReservation}
+          />
+          <ReservationButton
+            isSufficient={true}
+            isNext={false}
+            href={`/reservation/seat?schduleId=${schedule.id}`}
+            text={'チケット選択画面に戻る'}
+          />
+        </ReservationButtonLayout>
+      </div>
     </div>
   );
 };
