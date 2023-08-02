@@ -77,7 +77,7 @@ const ConfirmCard = ({ props }: Props) => {
       setSeats(seats);
     };
     res_schedule();
-  }, [selectSeat]);
+  }, []);
 
   return (
     <div css={styles.container}>
