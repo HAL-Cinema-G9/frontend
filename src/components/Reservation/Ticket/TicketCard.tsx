@@ -108,8 +108,9 @@ const TicketCard = ({ props }: Props) => {
         <IsSignInCard />
         <ReservationButtonLayout>
           <ReservationButton
+            // selectTicketの配列に空文字が含まれていないか
             isSufficient={
-              selectTicket.length > 0 && session
+              !selectTicket.includes('') && session
                 ? true
                 : false
             }
