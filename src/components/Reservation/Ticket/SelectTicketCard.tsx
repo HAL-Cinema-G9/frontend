@@ -48,8 +48,6 @@ const SelectTicketCard = ({ tickets, index }: Props) => {
     selectTicketState
   );
   const [showFlg, setShowFlg] = useState<boolean>(false);
-  console.log(selectTicket);
-
   const [selectedTicketId, setSelectedTicketId] =
     useState<string>('');
 
