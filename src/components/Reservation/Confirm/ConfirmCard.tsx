@@ -126,12 +126,19 @@ const ConfirmCard = ({ props }: Props) => {
           }
         );
 
-        if (response.status === 200) {
+        if (response.status === 201) {
           // 予約が成功した場合の処理をここに記述
-          router.push(`/reservation/complete`);
+          alert('予約に成功しました');
+          // router.push(`/reservation/complete`);
         } else {
           // 予約が失敗した場合の処理をここに記述
-          alert('予約に失敗しました');
+          alert(
+            '予約に失敗しました: すでに予約済みの可能性があります'
+          );
+          console.error(
+            'Error occurred while confirming reservation:',
+            response
+          );
         }
       }
     } catch (error) {
