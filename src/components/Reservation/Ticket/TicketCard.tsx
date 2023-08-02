@@ -121,7 +121,7 @@ const TicketCard = ({ props }: Props) => {
           <ReservationButton
             isSufficient={true}
             isNext={false}
-            href={`/reservation/seat?schduleId=${schedule.id}`}
+            href={`/reservation/seat?scheduleId=${schedule.id}`}
             text={'座席選択画面に戻る'}
           />
         </ReservationButtonLayout>

@@ -111,7 +111,6 @@ const ScreenCard = ({ props }: Props) => {
   const [selectSeat, setSelectSeat] =
     useRecoilState(selectSeatState);
 
-  console.log(schedule);
   useEffect(() => {
     setSelectSeat([]);
   }, []);
