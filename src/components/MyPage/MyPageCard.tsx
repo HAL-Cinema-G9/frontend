@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import { useState } from 'react';
 import Logout from '../Signin/Button/LogoutButton';
 import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/router';
+import { ReservationType } from '@/types/apiTypes';
 
 const styles = {
   container: css`
@@ -42,16 +42,16 @@ const styles = {
   `,
 };
 
-const MyPageCard = () => {
+type Props = {
+  myReservations: ReservationType[];
+};
+
+const MyPageCard = ({ myReservations }: Props) => {
   const [showSelectNav, setShowSelectNav] =
     useState<string>('account');
   const { data: session, status } = useSession();
-  const router = useRouter();
 
-  if (!session) {
-    router.push('/');
-  }
-
+  console.log(myReservations);
   return (
     <div css={styles.container}>
       <div css={styles.selectNavbar}>
