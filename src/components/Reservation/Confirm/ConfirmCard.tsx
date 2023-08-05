@@ -172,7 +172,7 @@ const ConfirmCard = ({ props }: Props) => {
           <ReservationButton
             isSufficient={true}
             isNext={false}
-            href={`/reservation/seat?scheduleId=${schedule.id}`}
+            href={`/reservation/ticket?scheduleId=${schedule.id}&seatId=${selectSeat}`}
             text={'チケット選択画面に戻る'}
           />
         </ReservationButtonLayout>
