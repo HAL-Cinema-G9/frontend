@@ -76,15 +76,15 @@ const Navbar = () => {
         </ul>
       </nav>
       {session && session.user?.image && (
-        <div css={styles.accountWrapper}>
+        <Link href={'/mypage'} css={styles.accountWrapper}>
           <Image
             src={session.user.image}
             alt={'ログインユーザーアイコン'}
-            height={70}
-            width={70}
+            height={60}
+            width={60}
             css={styles.accountImage}
           />
-        </div>
+        </Link>
       )}
       {!session && (
         <Link href={'/signin'} css={styles.signInLink}>

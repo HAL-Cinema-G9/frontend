@@ -55,9 +55,13 @@ export type ShapedScheduleMovie = {
 export type ReservationType = {
   id: number;
   user_id: number;
+  user: User;
   ticket_id: number;
+  ticket: Ticket;
   seat_id: number;
+  seat: Seat;
   schedule_id: number;
+  schedule: Schedule;
 };
 
 export type User = {
