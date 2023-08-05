@@ -141,6 +141,32 @@ const MovieCard = ({ props }: Props) => {
   const [isShowDetail, setIsShowDetail] =
     useState<boolean>(false);
 
+  // 座席残量割合を計算する
+  const getCalcSeatRatio = () => {
+    const filteredReservations = reservations.filter(
+      (reservation) => {
+        return reservation.schedule_id === movie.id;
+      }
+    );
+    const ratio =
+      Math.round(
+        (100 -
+          (filteredReservations.length / seats.length) *
+            100) *
+          10
+      ) / 10;
+    switch (true) {
+      case ratio >= 80:
+        return '◎';
+      case ratio >= 50:
+        return '⚪︎';
+      case ratio >= 20:
+        return '△';
+      default:
+        return 'x';
+    }
+  };
+
   return (
     <div css={styles.movieWrapper}>
       <div css={styles.titleWrapper}>
@@ -199,7 +225,7 @@ const MovieCard = ({ props }: Props) => {
                 href={`/reservation/seat?scheduleId=${movie.id}`}
                 css={styles.buyBtn}
               >
-                <span>&#9675;</span>
+                <span>{getCalcSeatRatio()}</span>
                 <p>購入</p>
               </Link>
             </div>
