@@ -86,8 +86,13 @@ const styles = {
     cursor: pointer;
   `,
   seatSelected: css`
-    background-color: #b71c1c;
+    background-color: #ff0000;
     color: #fff;
+  `,
+  seatReserved: css`
+    background-color: #333333;
+    color: #fff;
+    cursor: not-allowed;
   `,
   seatColumn: css`
     display: flex;
@@ -126,7 +131,15 @@ const ScreenCard = ({ props }: Props) => {
     seatGroups = groupSeats(seats, 10);
   }
 
+  const reservedSeat = reservations.map(
+    (reservation) => reservation.seat_id
+  );
   const selectSeatHandler = (seatId: number) => {
+    // すでに予約済みの座席を選択した場合は選択を無効
+    if (reservedSeat.includes(seatId)) {
+      // alert('すでに予約済みの座席です。');
+      return;
+    }
     if (selectSeat.includes(seatId)) {
       const newSelectSeat = selectSeat.filter(
         (seat) => seat !== seatId
@@ -172,6 +185,8 @@ const ScreenCard = ({ props }: Props) => {
                         styles.seat,
                         selectSeat.includes(seat.id) &&
                           styles.seatSelected,
+                        reservedSeat.includes(seat.id) &&
+                          styles.seatReserved,
                       ]}
                       onClick={() =>
                         selectSeatHandler(seat.id)
