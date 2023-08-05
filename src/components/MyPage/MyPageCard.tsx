@@ -62,6 +62,11 @@ const styles = {
       color: #919191;
     }
   `,
+  finishedSchedule: css`
+    color: #ff0000;
+    font-size: 1.2rem;
+    font-weight: bold;
+  `,
 };
 
 type Props = {
@@ -91,6 +96,24 @@ const MyPageCard = ({ myReservations }: Props) => {
       schedule.movie.duration
     )}`;
     return formattedDate;
+  };
+
+  // もし予約した映画の上映終了時刻が過ぎていたら、falseを返す
+  const isFinishedSchdule = (
+    reservation: ReservationType
+  ) => {
+    const scheduleDate = new Date(
+      reservation.schedule.date
+    );
+    const endMovieDate = new Date(
+      scheduleDate.getTime() +
+        reservation.schedule.movie.duration * 60000
+    );
+    const now = new Date();
+    if (now > endMovieDate) {
+      return true;
+    }
+    return false;
   };
 
   return (
@@ -129,9 +152,9 @@ const MyPageCard = ({ myReservations }: Props) => {
             <h4>メールアドレス</h4>
             <p>{session?.user?.email}</p>
           </div>
-          <div>
+          {/* <div>
             <h4>購入履歴</h4>
-          </div>
+          </div> */}
           <div>
             <Logout />
           </div>
@@ -149,6 +172,11 @@ const MyPageCard = ({ myReservations }: Props) => {
               key={reservation.id}
               css={styles.reservationWrapper}
             >
+              {isFinishedSchdule(reservation) && (
+                <h4 css={styles.finishedSchedule}>
+                  ※上映終了しています
+                </h4>
+              )}
               <h4>{reservation.schedule.movie.title}</h4>
               <p>
                 座席：{reservation.seat.column}
