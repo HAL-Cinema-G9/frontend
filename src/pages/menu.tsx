@@ -1,9 +1,13 @@
-import React from 'react'
+import Navbar from '@/components/Navbar';
+import MenuModal from '@/components/Menu/MenuModal';
 
 const Menu = () => {
   return (
-    <div>Menu</div>
-  )
-}
+    <main>
+      <Navbar />
+      <MenuModal />
+    </main>
+  );
+};
 
-export default Menu
+export default Menu;
